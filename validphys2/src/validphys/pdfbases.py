@@ -6,13 +6,13 @@ as declaratively as possible.
 """
 
 import abc
+from collections import defaultdict
 import copy
 import functools
 import inspect
 
 import numpy as np
 
-from collections import defaultdict
 from reportengine.checks import CheckError
 from validphys.gridvalues import central_grid_values, grid_values
 
@@ -57,7 +57,7 @@ PIDS_DICT = {
 ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
 
-# Define the N3FIT basis which will be 
+# Define the N3FIT basis which will be
 N3FIT_BASIS = ("sng", "g", "v", "v3", "v8", "t3", "t8", "cp", "v15", "t24")
 N3FIT_TO_FKTABLE_TRANSFORMATION = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # photon
@@ -77,7 +77,7 @@ N3FIT_TO_FKTABLE_TRANSFORMATION = [
 ]
 assert len(N3FIT_BASIS) == len(N3FIT_TO_FKTABLE_TRANSFORMATION[0])
 # TODO: this intermediate step is unnecessary and the function at the bottom
-# should already return the result in the FKTABLE basis, the N3FIT basis 
+# should already return the result in the FKTABLE basis, the N3FIT basis
 # is completely artificial and a remnant of the NN31IC basis
 
 
@@ -909,6 +909,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         v15.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": 0, "g": 0})
     elif fitbasis == 'EVOL' or fitbasis == 'evolution':
         cp.update({"sng": 0.25, "t15": -0.25})
+        t24.update({"sng": 1})
         v15.update({"v": 1})
     elif fitbasis == 'BACTIV':
         cp.update({"sng": 0.25, "t15": -0.25})
